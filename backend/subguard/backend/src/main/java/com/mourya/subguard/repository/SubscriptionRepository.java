@@ -13,9 +13,15 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     Optional<Subscription> findByServiceNameAndUser(String serviceName, User user);
 
-    boolean existsByServiceNameAndUser(String serviceName, User user);
+//    boolean existsByServiceNameAndUser(String serviceName, User user);
 
     boolean existsByServiceNameAndAmountAndUser(
+            String serviceName,
+            double amount,
+            User user
+    );
+
+    Optional<Subscription> findByServiceNameAndAmountAndUser(
             String serviceName,
             double amount,
             User user

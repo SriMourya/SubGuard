@@ -30,56 +30,6 @@ public class SubscriptionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
-    public void detectSubscriptions(Long userId) {
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        List<Transaction> transactions = transactionRepository.findByUser(user);
-
-        // group by merchant
-        Map<String, List<Transaction>> grouped =
-                transactions.stream()
-                        .collect(Collectors.groupingBy(Transaction::getMerchant));
-
-        for (String merchant : grouped.keySet()) {
-
-            List<Transaction> txns = grouped.get(merchant);
-
-            // only consider if recurring (at least 2 transactions)
-            if (txns.size() < 2) continue;
-
-            double amount = txns.get(0).getAmount();
-
-            // check if already exists
-            boolean exists = subscriptionRepository
-                    .existsByServiceNameAndAmountAndUser(merchant, amount, user);
-
-            if (!exists) {
-
-                Subscription sub = new Subscription();
-                sub.setServiceName(merchant);
-                sub.setAmount(amount);
-                sub.setUser(user);
-                sub.setStatus("ACTIVE");
-                sub.setSource("AUTO");
-
-                sub.setLastPaymentDate(
-                        txns.get(txns.size() - 1).getDate()
-                );
-
-                sub.setNextBillingDate(
-                        sub.getLastPaymentDate().plusMonths(1)
-                );
-
-                subscriptionRepository.save(sub);
-
-                System.out.println("Detected subscription: " + merchant);
-            }
-        }
-    }
-
-
     public Subscription addManualSubscription(Long userId, Subscription sub) {
 
         User user = userRepository.findById(userId)
@@ -91,13 +41,6 @@ public class SubscriptionService {
 
         return subscriptionRepository.save(sub);
     }
-
-    //find all subs
-    public List<Subscription> getAllSubscriptions() {
-        return subscriptionRepository.findAll();
-    }
-
-    //Get all subscriptions
     public List<Subscription> getSubscriptions(Long userId) {
 
         User user = userRepository.findById(userId)
@@ -105,33 +48,114 @@ public class SubscriptionService {
 
         return subscriptionRepository.findByUser(user);
     }
-
     public void deleteSubscription(Long id) {
         subscriptionRepository.deleteById(id);
     }
+    public List<Subscription> getAllSubscriptions() {
+        return subscriptionRepository.findAll();
+    }
 
+    public void detectSubscriptions(Long userId) {
 
-    public void updateUsageStatus() {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<Subscription> subs = subscriptionRepository.findAll();
+        List<Transaction> transactions = transactionRepository.findByUser(user);
 
-        LocalDate today = LocalDate.now();
+        Map<String, List<Transaction>> grouped =
+                transactions.stream()
+                        .collect(Collectors.groupingBy(
+                                t -> t.getMerchant() + "_" + t.getAmount()
+                        ));
 
-        for (Subscription sub : subs) {
+        for (List<Transaction> txns : grouped.values()) {
 
-            long days = ChronoUnit.DAYS.between(sub.getLastPaymentDate(), today);
+            if (txns.size() < 2) continue;
 
-            if (days <= 30) {
-                sub.setStatus("ACTIVE");
-            } else if (days <= 60) {
-                sub.setStatus("POSSIBLY_UNUSED");
-            } else {
-                sub.setStatus("LIKELY_UNUSED");
+            txns.sort((a, b) -> a.getDate().compareTo(b.getDate()));
+
+            boolean isMonthly = false;
+            boolean isYearly = false;
+
+            for (int i = 1; i < txns.size(); i++) {
+                long diff = ChronoUnit.DAYS.between(
+                        txns.get(i - 1).getDate(),
+                        txns.get(i).getDate()
+                );
+
+                if (diff >= 28 && diff <= 32) isMonthly = true;
+                if (diff >= 360 && diff <= 370) isYearly = true;
             }
+
+            if (!isMonthly && !isYearly) continue;
+
+            String merchant = txns.get(0).getMerchant();
+            double amount = txns.get(0).getAmount();
+
+            Subscription sub = subscriptionRepository
+                    .findByServiceNameAndAmountAndUser(merchant, amount, user)
+                    .orElse(null);
+
+            LocalDate lastDate = txns.get(txns.size() - 1).getDate();
+
+            if (sub == null) {
+                sub = new Subscription();
+                sub.setServiceName(merchant);
+                sub.setAmount(amount);
+                sub.setUser(user);
+                sub.setSource("AUTO");
+            }
+
+            sub.setLastPaymentDate(lastDate);
+
+
+            if (isMonthly) {
+                sub.setBillingCycle("MONTHLY");
+                sub.setNextBillingDate(lastDate.plusDays(30));
+            } else {
+                sub.setBillingCycle("YEARLY");
+                sub.setNextBillingDate(lastDate.plusDays(365));
+            }
+
 
             subscriptionRepository.save(sub);
         }
     }
+    public void updateUsageStatus() {
+
+        List<Subscription> subs = subscriptionRepository.findAll();
+        LocalDate today = LocalDate.now();
+
+        for (Subscription sub : subs) {
+
+            if (sub.getLastPaymentDate() == null) continue;
+
+            long days = ChronoUnit.DAYS.between(sub.getLastPaymentDate(), today);
+
+            if ("MONTHLY".equals(sub.getBillingCycle())) {
+
+                if (days <= 40) {
+                    sub.setStatus("ACTIVE");
+                } else if (days <= 70) {
+                    sub.setStatus("POSSIBLY_UNUSED");
+                } else {
+                    sub.setStatus("LIKELY_UNUSED");
+                }
+
+            } else if ("YEARLY".equals(sub.getBillingCycle())) {
+
+                if (days <= 380) {
+                    sub.setStatus("ACTIVE");
+                } else if (days <= 420) {
+                    sub.setStatus("POSSIBLY_UNUSED");
+                } else {
+                    sub.setStatus("LIKELY_UNUSED");
+                }
+            }
+
+            subscriptionRepository.save(sub);
+        }
+     }
 
 
 }

@@ -23,7 +23,7 @@ public class SubscriptionController {
     @PostMapping("/{userId}")
     public String detect(@PathVariable Long userId) {
 
-        transactionService.detectSubscriptions(userId);
+        subscriptionService.detectSubscriptions(userId);
 
         return "Detection completed";
     }

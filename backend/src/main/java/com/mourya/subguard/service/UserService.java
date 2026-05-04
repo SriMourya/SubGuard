@@ -4,12 +4,17 @@ import com.mourya.subguard.entity.User;
 import com.mourya.subguard.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.mourya.subguard.dtos.LoginRequest;
+import com.mourya.subguard.security.JwtUtil;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     public User saveUser(User user) {
 
@@ -28,5 +33,30 @@ public class UserService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
+    }
+
+    public String login(LoginRequest request) {
+
+        System.out.println("LOGIN REQUEST EMAIL: " + request.getEmail());
+        System.out.println("LOGIN REQUEST PASSWORD: " + request.getPassword());
+
+        User user = userRepository.findByEmail(request.getEmail()).orElse(null);
+
+        System.out.println("USER FROM DB: " + user);
+
+        if (user != null) {
+            System.out.println("DB PASSWORD: " + user.getPassword());
+        }
+
+        if (user != null && user.getPassword().equals(request.getPassword())) {
+
+            // 🔥 ADD THIS PART HERE
+            String token = jwtUtil.generateToken(user.getEmail());
+            System.out.println("TOKEN GENERATED: " + token);
+
+            return token;
+        }
+
+        throw new RuntimeException("Invalid credentials");
     }
 }

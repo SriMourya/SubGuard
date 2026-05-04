@@ -12,16 +12,17 @@ export default function Home() {
   const [userId, setUserId] = useState<number | null>(null);
   const [file, setFile] = useState<File | null>(null);
 
-  useEffect(() => {
-    const id = localStorage.getItem("userId");
+     useEffect(() => {
+       const token = localStorage.getItem("token");
 
-    if (!id) {
-      window.location.href = "/login";
-    } else {
-      setUserId(Number(id));
-    }
-  }, []);
+       if (!token) {
+         window.location.href = "/login";
+       }
 
+       if (userId === null) {
+         setUserId(1);
+       }
+     }, []);
   useEffect(() => {
     if (userId !== null) {
       loadSubscriptions();
@@ -35,6 +36,8 @@ export default function Home() {
   };
 
   const handleUpload = async () => {
+    const token = localStorage.getItem("token");
+
     if (!file) {
       alert("Please select a CSV file");
       return;
@@ -51,6 +54,9 @@ export default function Home() {
     try {
       await fetch(`http://localhost:8080/transactions/upload/${userId}`, {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         body: formData,
       });
 
@@ -86,7 +92,7 @@ export default function Home() {
 
         <button
           onClick={() => {
-            localStorage.removeItem("userId");
+            localStorage.removeItem("token");
             window.location.href = "/login";
           }}
           className="bg-red-500 hover:bg-red-600 text-white px-4 py-2"

@@ -12,15 +12,18 @@ export default function AddSubscription() {
 
   const router = useRouter();
 
-  useEffect(() => {
-    const id = localStorage.getItem("userId");
-    if (!id) {
-      router.push("/login");
-    } else {
-      setUserId(Number(id));
-    }
-  }, []);
 
+
+useEffect(() => {
+   const token = localStorage.getItem("token");
+
+   if (!token) {
+     router.push("/login");
+     return;
+   }
+
+   setUserId(1);
+ }, []);
   const handleAdd = async () => {
     if (!serviceName || !amount || !nextDate) {
       alert("Fill all fields");
@@ -28,12 +31,14 @@ export default function AddSubscription() {
     }
 
     try {
+        const token = localStorage.getItem("token");
       await fetch(
         `http://localhost:8080/subscriptions/manual/${userId}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
           body: JSON.stringify({
             serviceName,

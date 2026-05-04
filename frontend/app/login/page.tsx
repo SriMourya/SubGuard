@@ -18,25 +18,23 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password }),
       });
 
-        if (!res.ok) {
-          const text = await res.text(); // read as text
-          alert(text); // show error
-          return;
-        }
+      console.log("STATUS:", res.status);
 
-      const data = await res.json();
+      const text = await res.text();
+      console.log("RESPONSE:", text);
 
-      if (data && data.id) {
-        localStorage.setItem("userId", data.id);
-        router.push("/"); // go to dashboard
-      } else {
-        alert("Invalid login");
+      if (!res.ok) {
+        alert(text);
+        return;
       }
+
+      localStorage.setItem("token", text);
+      router.push("/"); // redirect
+
     } catch (err) {
       console.error("LOGIN ERROR:", err);
     }
   };
-
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="border rounded-lg p-6 shadow w-80 space-y-4">
@@ -64,6 +62,7 @@ export default function LoginPage() {
         >
           Login
         </button>
+
         <p className="text-sm text-center">
           Don’t have an account?{" "}
           <span

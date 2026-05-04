@@ -14,10 +14,10 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> findByUser(User user);
 
     // Get transactions between dates (for analysis)
-    List<Transaction> findByUserAndDateBetween(User user, LocalDate start, LocalDate end);
+//    List<Transaction> findByUserAndDateBetween(User user, LocalDate start, LocalDate end);
 
     // Get transactions by merchant (important for subscription detection)
-    List<Transaction> findByUserAndMerchant(User user, String merchant);
+//    List<Transaction> findByUserAndMerchant(User user, String merchant);
 
     boolean existsByDateAndAmountAndMerchantAndUser(
             LocalDate date,

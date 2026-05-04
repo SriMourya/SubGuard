@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/subscriptions")
 public class SubscriptionController {
@@ -22,7 +23,7 @@ public class SubscriptionController {
     @PostMapping("/{userId}")
     public String detect(@PathVariable Long userId) {
 
-        transactionService.detectSubscriptions(userId);
+        subscriptionService.detectSubscriptions(userId);
 
         return "Detection completed";
     }
@@ -38,5 +39,11 @@ public class SubscriptionController {
     @GetMapping("/{userId}")
     public List<Subscription> getSubscriptions(@PathVariable Long userId) {
         return subscriptionService.getSubscriptions(userId);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteSubscription(@PathVariable Long id) {
+        subscriptionService.deleteSubscription(id);
+        return "Deleted successfully";
     }
 }

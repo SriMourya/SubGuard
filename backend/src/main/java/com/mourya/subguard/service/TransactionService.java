@@ -4,6 +4,7 @@ import com.mourya.subguard.entity.Subscription;
 import com.mourya.subguard.entity.Transaction;
 import com.mourya.subguard.entity.User;
 import com.mourya.subguard.exception.DuplicateTransactionException;
+import com.mourya.subguard.service.SubscriptionService;
 import com.mourya.subguard.repository.SubscriptionRepository;
 import com.mourya.subguard.repository.TransactionRepository;
 import com.mourya.subguard.repository.UserRepository;
@@ -24,6 +25,9 @@ public class TransactionService {
 
     @Autowired
     private TransactionRepository transactionRepository;
+
+    @Autowired
+    private SubscriptionService subscriptionService;
 
     @Autowired
     private SubscriptionRepository subscriptionRepository;
@@ -93,11 +97,11 @@ public class TransactionService {
 
             while ((line = reader.readLine()) != null) {
 
-                if (line.trim().isEmpty()) continue; // skip empty lines
+                if (line.trim().isEmpty()) continue;
 
                 String[] data = line.split(",");
 
-                if (data.length < 3) continue; // avoid crash
+                if (data.length < 3) continue;
 
                 Transaction transaction = new Transaction();
 
@@ -121,94 +125,15 @@ public class TransactionService {
                 }
             }
 
+            // AUTO DETECT SUBSCRIPTIONS
+            subscriptionService.detectSubscriptions(userId);
+
         } catch (Exception e) {
             throw new RuntimeException("Error processing CSV file", e);
         }
     }
 
-    //for detecting subscription from trasactions
-    public void detectSubscriptions(Long userId) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        List<Transaction> transactions = transactionRepository.findByUser(user);
-
-        Map<String, List<Transaction>> grouped = transactions.stream()
-                .collect(Collectors.groupingBy(
-                        t -> t.getMerchant() + "_" + t.getAmount()
-                ));
-
-        for (List<Transaction> list : grouped.values()) {
-
-            if (list.size() < 2) continue;
-
-            list.sort(Comparator.comparing(Transaction::getDate));
-
-            boolean isMonthly = false;
-            boolean isYearly = false;
-
-            //  CHECK PATTERN
-            for (int i = 1; i < list.size(); i++) {
-
-                long diff = ChronoUnit.DAYS.between(
-                        list.get(i - 1).getDate(),
-                        list.get(i).getDate()
-                );
-
-                if (diff >= 28 && diff <= 32) {
-                    isMonthly = true;
-                }
-
-                if (diff >= 360 && diff <= 370) {
-                    isYearly = true;
-                }
-            }
-
-            if (!isMonthly && !isYearly) continue;
-
-            String serviceName = list.get(0).getMerchant();
-
-            Subscription sub = subscriptionRepository
-                    .findByServiceNameAndUser(serviceName, user)
-                    .orElse(null);
-
-            LocalDate lastDate = list.get(list.size() - 1).getDate();
-
-            if (sub == null) {
-                // CREATE
-                sub = new Subscription();
-                sub.setServiceName(serviceName);
-                sub.setAmount(list.get(0).getAmount());
-                sub.setUser(user);
-                sub.setSource("AUTO");
-            }
-
-            // UPDATE (COMMON)
-            sub.setLastPaymentDate(lastDate);
-
-            if (isMonthly) {
-                sub.setBillingCycle("MONTHLY");
-                sub.setNextBillingDate(lastDate.plusDays(30));
-            } else if (isYearly) {
-                sub.setBillingCycle("YEARLY");
-                sub.setNextBillingDate(lastDate.plusDays(365));
-            }
-
-            //  HEURISTIC: ACTIVE / INACTIVE
-            long daysSinceLast = ChronoUnit.DAYS.between(lastDate, LocalDate.now());
-
-            if (daysSinceLast <= 40 || (isYearly && daysSinceLast <= 400)) {
-                sub.setStatus("ACTIVE");
-            } else {
-                sub.setStatus("INACTIVE");
-            }
-
-            subscriptionRepository.save(sub);
-
-            System.out.println(" Updated subscription: " + serviceName);
-        }
-    }
     // Get all transactions of user
     public List<Transaction> getTransactions(Long userId) {
 

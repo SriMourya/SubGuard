@@ -21,34 +21,40 @@ public class SubscriptionScheduler {
     @Autowired
     private EmailService emailService;
 
+    //    @Scheduled(fixedRate = 60000) //per minute
     @Scheduled(cron = "0 0 9 * * ?") // daily at 9 AM
     public void checkUpcomingPayments() {
 
         List<Subscription> subs = subscriptionService.getAllSubscriptions();
         LocalDate today = LocalDate.now();
 
+        subscriptionService.updateUsageStatus();
+
         for (Subscription sub : subs) {
 
             if (sub.getNextBillingDate() == null) continue;
+            if (sub.getStatus() != null && sub.getStatus().equals("ACTIVE")) {
 
-            long daysLeft = ChronoUnit.DAYS.between(today, sub.getNextBillingDate());
 
-            if (daysLeft == 3) {
+                long daysLeft = ChronoUnit.DAYS.between(today, sub.getNextBillingDate());
 
-                String email = sub.getUser().getEmail(); //  dynamic
+                if (daysLeft >= 0 && daysLeft <= 3) {
 
-                String subject = "Subscription Reminder";
+                    String email = sub.getUser().getEmail(); //  dynamic
 
-                String body = "Hi " + sub.getUser().getName() + ",\n\n" +
-                        "Your subscription for " + sub.getServiceName() +
-                        " will renew in 3 days.\n" +
-                        "Amount: ₹" + sub.getAmount() + "\n\n" +
-                        "Please review if you still want to continue.\n\n" +
-                        "Thanks,\nSubGuard Team";
+                    String subject = "Subscription Reminder";
 
-                emailService.sendEmail(email, subject, body);
+                    String body = "Hi " + sub.getUser().getName() + ",\n\n" +
+                            "Your subscription for " + sub.getServiceName() +
+                            " will renew in"+ daysLeft +"day(s).\n" +
+                            "Amount: ₹" + sub.getAmount() + "\n\n" +
+                            "Please review if you still want to continue.\n\n" +
+                            "Thanks,\nSubGuard Team";
 
-                System.out.println("Reminder sent: " + sub.getServiceName());
+                    emailService.sendEmail(email, subject, body);
+
+                    System.out.println("Reminder sent: " + sub.getServiceName());
+                }
             }
         }
     }

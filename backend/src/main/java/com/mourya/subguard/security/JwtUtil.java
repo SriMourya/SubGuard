@@ -10,7 +10,9 @@ import java.security.Key;
 public class JwtUtil {
 
 //    private final String SECRET = "mysecretkey";
-      private final String SECRET = "mysecretkeymysecretkeymysecretkey123";
+//      private final String SECRET = "mysecretkeymysecretkeymysecretkey123";
+    @Value("${jwt.secret}")
+    private String SECRET;
 
     private Key getKey() {
         return Keys.hmacShaKeyFor(SECRET.getBytes());

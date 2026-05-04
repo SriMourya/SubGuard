@@ -50,7 +50,7 @@ public class UserService {
 
         if (user != null && user.getPassword().equals(request.getPassword())) {
 
-            // 🔥 ADD THIS PART HERE
+
             String token = jwtUtil.generateToken(user.getEmail());
             System.out.println("TOKEN GENERATED: " + token);
 

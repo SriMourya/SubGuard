@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
+import org.springframework.beans.factory.annotation.Value;
 
 @Component
 public class JwtUtil {

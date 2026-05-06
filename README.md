@@ -178,15 +178,21 @@ This helps identify recurring subscriptions while avoiding one-time payments.
 
 ## Add Subscription Page
 
-<img width="1912" height="853" alt="image" src="https://github.com/user-attachments/assets/7759a43f-e37b-4205-9e17-4195d71b1640" />
+<p align="center">
+  <img width="1912" height="853" src="https://github.com/user-attachments/assets/7759a43f-e37b-4205-9e17-4195d71b1640" />
+</p>
 
+<br>
 
+<p align="center">
+  <img width="549" height="795" src="https://github.com/user-attachments/assets/aa4733bd-e6ed-4066-a23e-2430b04dece5" />
+</p>
 
-<img width="549" height="795" alt="image" src="https://github.com/user-attachments/assets/aa4733bd-e6ed-4066-a23e-2430b04dece5" />
+<br>
 
-
-
-<img width="1676" height="767" alt="image" src="https://github.com/user-attachments/assets/c4ae152b-8d50-4d19-a7af-256e7bf1ac4d" />
+<p align="center">
+  <img width="1676" height="767" src="https://github.com/user-attachments/assets/c4ae152b-8d50-4d19-a7af-256e7bf1ac4d" />
+</p>
 
 
 ---

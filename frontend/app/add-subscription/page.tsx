@@ -15,15 +15,16 @@ export default function AddSubscription() {
 
 
 useEffect(() => {
-   const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
+  const id = localStorage.getItem("userId");
 
-   if (!token) {
-     router.push("/login");
-     return;
-   }
+  if (!token || !id) {
+    router.push("/login");
+    return;
+  }
 
-   setUserId(1);
- }, []);
+  setUserId(Number(id));
+}, []);
   const handleAdd = async () => {
     if (!serviceName || !amount || !nextDate) {
       alert("Fill all fields");

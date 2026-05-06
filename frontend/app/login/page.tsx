@@ -20,16 +20,19 @@ export default function LoginPage() {
 
       console.log("STATUS:", res.status);
 
-      const text = await res.text();
-      console.log("RESPONSE:", text);
+//       const text = await res.text();
+//       console.log("RESPONSE:", text);
 
       if (!res.ok) {
         alert(text);
         return;
       }
+    const data = await res.json();
 
-      localStorage.setItem("token", text);
-      router.push("/"); // redirect
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("userId", data.userId);
+
+    router.push("/");
 
     } catch (err) {
       console.error("LOGIN ERROR:", err);

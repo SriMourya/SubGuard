@@ -12,17 +12,17 @@ export default function Home() {
   const [userId, setUserId] = useState<number | null>(null);
   const [file, setFile] = useState<File | null>(null);
 
-     useEffect(() => {
-       const token = localStorage.getItem("token");
+    useEffect(() => {
+      const token = localStorage.getItem("token");
+      const id = localStorage.getItem("userId");
 
-       if (!token) {
-         window.location.href = "/login";
-       }
+      if (!token || !id) {
+        window.location.href = "/login";
+        return;
+      }
 
-       if (userId === null) {
-         setUserId(1);
-       }
-     }, []);
+      setUserId(Number(id));
+    }, []);
   useEffect(() => {
     if (userId !== null) {
       loadSubscriptions();
@@ -93,6 +93,7 @@ export default function Home() {
         <button
           onClick={() => {
             localStorage.removeItem("token");
+            localStorage.removeItem("userId");
             window.location.href = "/login";
           }}
           className="bg-red-500 hover:bg-red-600 text-white px-4 py-2"

@@ -24,7 +24,7 @@ export default function LoginPage() {
 //       console.log("RESPONSE:", text);
 
       if (!res.ok) {
-        alert(text);
+        alert("Invalid credentials");
         return;
       }
     const data = await res.json();

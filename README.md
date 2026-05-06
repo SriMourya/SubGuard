@@ -51,6 +51,7 @@ https://sub-guard-delta.vercel.app
 ---
 
 ## Automation
+- Daily scheduled subscription status updates at 9:00 AM
 - Scheduled subscription status updates
 - Email reminders before billing dates
 - Automated recurring analysis

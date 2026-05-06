@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.mourya.subguard.dtos.LoginRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
+import com.mourya.subguard.dtos.LoginRequest;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -59,17 +60,23 @@ public class UserController {
 //        }
 //    }
 
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+//
+//        try {
+//            String token = userService.login(request);
+//            return ResponseEntity.ok(token);
+//
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                    .body("Invalid credentials");
+//        }
+//    }
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(
+            @RequestBody LoginRequest request) {
 
-        try {
-            String token = userService.login(request);
-            return ResponseEntity.ok(token);
-
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Invalid credentials");
-        }
+        return ResponseEntity.ok(userService.login(request));
     }
 
     @GetMapping("/{id}")

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.mourya.subguard.dtos.LoginRequest;
 import com.mourya.subguard.security.JwtUtil;
+import com.mourya.subguard.dtos.LoginResponse;
 
 @Service
 public class UserService {
@@ -35,7 +36,7 @@ public class UserService {
         return userRepository.findByEmail(email).orElse(null);
     }
 
-    public String login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
 
         System.out.println("LOGIN REQUEST EMAIL: " + request.getEmail());
         System.out.println("LOGIN REQUEST PASSWORD: " + request.getPassword());
@@ -54,7 +55,7 @@ public class UserService {
             String token = jwtUtil.generateToken(user.getEmail());
             System.out.println("TOKEN GENERATED: " + token);
 
-            return token;
+            return new LoginResponse(token, user.getId());
         }
 
         throw new RuntimeException("Invalid credentials");

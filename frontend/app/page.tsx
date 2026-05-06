@@ -52,7 +52,7 @@ export default function Home() {
     formData.append("file", file);
 
     try {
-      await fetch(`http://localhost:8080/transactions/upload/${userId}`, {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/transactions/upload/${userId}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

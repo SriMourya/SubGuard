@@ -11,7 +11,7 @@ export default function SignupPage() {
 
   const handleSignup = async () => {
     try {
-      const res = await fetch("http://localhost:8080/users", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -33,7 +33,7 @@ useEffect(() => {
     try {
         const token = localStorage.getItem("token");
       await fetch(
-        `http://localhost:8080/subscriptions/manual/${userId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/manual/${userId}`,
         {
           method: "POST",
           headers: {

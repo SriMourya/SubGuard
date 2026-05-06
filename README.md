@@ -11,6 +11,8 @@ The platform analyzes uploaded transaction history (CSV) and automatically detec
 https://sub-guard-delta.vercel.app
 
 
+> Note: The backend is hosted on Render free tier and may take a few seconds to respond on the first request due to cold-start behavior.
+
 ---
 
 # Features
@@ -175,11 +177,14 @@ This helps identify recurring subscriptions while avoiding one-time payments.
 
 
 ## Add Subscription Page
-<img width="1899" height="838" alt="image" src="https://github.com/user-attachments/assets/c4246685-eb92-4cee-93f7-286941e5398c" />
 
 <img width="1912" height="853" alt="image" src="https://github.com/user-attachments/assets/7759a43f-e37b-4205-9e17-4195d71b1640" />
 
+
+
 <img width="549" height="795" alt="image" src="https://github.com/user-attachments/assets/aa4733bd-e6ed-4066-a23e-2430b04dece5" />
+
+
 
 <img width="1676" height="767" alt="image" src="https://github.com/user-attachments/assets/c4ae152b-8d50-4d19-a7af-256e7bf1ac4d" />
 

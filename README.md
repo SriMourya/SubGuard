@@ -252,6 +252,13 @@ spring.mail.password=YOUR_APP_PASSWORD
 jwt.secret=YOUR_SECRET_KEY
 ```
 
+## Docker Support
+
+```bash
+docker build -t subguard-backend .
+docker run -p 8080:8080 subguard-backend
+```
+
 ---
 
 # Future Enhancements

@@ -1,4 +1,4 @@
-package com.mourya.subgaurd;
+package com.mourya.subguard;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

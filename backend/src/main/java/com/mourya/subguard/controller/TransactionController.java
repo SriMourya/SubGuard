@@ -2,6 +2,7 @@ package com.mourya.subguard.controller;
 
 import com.mourya.subguard.entity.Transaction;
 import com.mourya.subguard.service.TransactionService;
+import com.mourya.subguard.kafka.KafkaProducerService;
 import com.mourya.subguard.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,21 @@ public class TransactionController {
 
     @Autowired
     private SubscriptionService subscriptionService;
+
+
+//    private final KafkaProducerService kafkaProducerService;
+
+
+//    public TransactionController(
+//            TransactionService transactionService,
+//            SubscriptionService subscriptionService,
+//            KafkaProducerService kafkaProducerService) {
+//
+//        this.transactionService = transactionService;
+//        this.subscriptionService = subscriptionService;
+//        this.kafkaProducerService = kafkaProducerService;
+//    }
+
 
     // Add transaction
     @PostMapping("/{userId}")
@@ -38,6 +54,8 @@ public class TransactionController {
         System.out.println(" Upload API hit");
 
         transactionService.processCSV(file, userId);
+//        kafkaProducerService.sendMessage(
+//                userId.toString());
         return "File uploaded successfully!";
     }
 
@@ -54,6 +72,10 @@ public class TransactionController {
         System.out.println("DETECT API HIT");
 
         subscriptionService.detectSubscriptions(userId);
+
+//        kafkaProducerService.sendNotificationEvent(
+//                userId.toString());
+
         return "Subscriptions detected!";
     }
 

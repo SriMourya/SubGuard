@@ -235,8 +235,9 @@ This helps identify recurring subscriptions while avoiding one-time payments.
   <img width="1892" height="821" alt="image" src="https://github.com/user-attachments/assets/9f3ee84b-af10-4c7d-a34c-b806203b70f4" />
 </p>
 
-<br>
+---
 
+## Analytics
 
 <p align="center">
   "<img width="1912" height="739" alt="image" src="https://github.com/user-attachments/assets/a8a2ac3b-60a2-420b-80ba-7a18bc27d1ab" />

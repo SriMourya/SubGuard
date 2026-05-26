@@ -225,7 +225,6 @@ This helps identify recurring subscriptions while avoiding one-time payments.
 
 <p align="center">
   <img width="1746" height="691" alt="image" src="https://github.com/user-attachments/assets/9a308427-72a4-4836-9133-2a2f82b2cec9" />
-" />
 </p>
 
 ---
@@ -234,7 +233,6 @@ This helps identify recurring subscriptions while avoiding one-time payments.
 
 <p align="center">
   <img width="1892" height="821" alt="image" src="https://github.com/user-attachments/assets/9f3ee84b-af10-4c7d-a34c-b806203b70f4" />
-" />
 </p>
 
 <br>
@@ -242,7 +240,7 @@ This helps identify recurring subscriptions while avoiding one-time payments.
 
 <p align="center">
   "<img width="1912" height="739" alt="image" src="https://github.com/user-attachments/assets/a8a2ac3b-60a2-420b-80ba-7a18bc27d1ab" />
-" />
+
 </p>
 
 ---

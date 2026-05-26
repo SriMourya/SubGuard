@@ -1,4 +1,4 @@
-# SubGuard 
+# SubGuard
 
 SubGuard is a full-stack subscription tracking and recurring payment detection system that helps users monitor and manage their subscriptions intelligently.
 
@@ -8,8 +8,7 @@ The platform analyzes uploaded transaction history (CSV) and automatically detec
 
 # Live Demo
 
-https://sub-guard-delta.vercel.app
-
+Frontend: https://sub-guard-delta.vercel.app
 
 > Note: The backend is hosted on Render free tier and may take a few seconds to respond on the first request due to cold-start behavior.
 
@@ -18,9 +17,10 @@ https://sub-guard-delta.vercel.app
 # Features
 
 ## Authentication
-- JWT-based authentication
+- Secure JWT-based authentication and authorization
 - Secure login & signup
-- Secure API communication using JWT tokens
+- Protected frontend routes using session storage
+- Secure API communication using Bearer tokens
 
 ---
 
@@ -29,6 +29,7 @@ https://sub-guard-delta.vercel.app
 - Store and manage transactions
 - Duplicate transaction prevention
 - Manual transaction support
+- Dynamic transaction processing
 
 ---
 
@@ -38,6 +39,7 @@ https://sub-guard-delta.vercel.app
 - Flexible billing cycle tolerance (28–32 days)
 - False-positive prevention logic
 - Dynamic subscription generation from transaction history
+- Recurring payment heuristic analysis
 
 ---
 
@@ -45,16 +47,43 @@ https://sub-guard-delta.vercel.app
 - View detected subscriptions
 - Add subscriptions manually
 - Delete subscriptions
-- Active/Inactive status tracking
+- Active/Inactive subscription tracking
 - Upcoming billing date tracking
 
 ---
 
-## Automation
+## Analytics Dashboard
+- Monthly and yearly subscription insights
+- Interactive charts using Recharts
+- Spending visualization dashboard
+- Subscription breakdown analytics
+
+---
+
+## Automation & Notifications
 - Daily scheduled subscription status updates at 9:00 AM
-- Scheduled subscription status updates
-- Email reminders before billing dates
 - Automated recurring analysis
+- Email reminders before billing dates
+- Kafka-based asynchronous event processing
+- Event-driven notification workflows
+- Async subscription detection pipeline
+
+---
+
+# Event-Driven Workflow
+
+SubGuard uses Apache Kafka for asynchronous event-driven processing.
+
+Workflow:
+
+1. User uploads transaction CSV
+2. Backend publishes Kafka event
+3. Kafka consumers process transaction events asynchronously
+4. Subscription detection service analyzes recurring payments
+5. Notification consumer triggers email alerts
+6. Scheduler manages recurring reminder workflows
+
+Kafka is deployed locally using Docker Compose.
 
 ---
 
@@ -81,7 +110,9 @@ This helps identify recurring subscriptions while avoiding one-time payments.
 - Multiple subscriptions from same service
 - Flexible billing cycle handling
 - Insufficient recurring pattern filtering
-- JWT-based authentication for secure API communication
+- JWT-secured API communication
+- Duplicate transaction prevention
+- Async event handling using Kafka
 
 ---
 
@@ -94,8 +125,11 @@ This helps identify recurring subscriptions while avoiding one-time payments.
 - JWT Authentication
 - Spring Data JPA
 - PostgreSQL
+- Apache Kafka
+- Spring Kafka
 - Maven
 - Docker
+- Docker Compose
 
 ---
 
@@ -104,13 +138,16 @@ This helps identify recurring subscriptions while avoiding one-time payments.
 - React
 - TypeScript
 - Tailwind CSS
+- Recharts
+- Lucide React
 
 ---
 
 ## Deployment
 - Frontend: Vercel
 - Backend: Render
-- Database: Render PostgreSQL
+- Database: PostgreSQL
+- Kafka: Docker Compose (Local)
 
 ---
 
@@ -155,126 +192,104 @@ This helps identify recurring subscriptions while avoiding one-time payments.
  │   Next.js    │ ◀─────────────────────── │ Spring Boot   │
  └──────────────┘       JSON Response       └──────┬────────┘
                                                     │
-                                                    │ SQL Queries
-                                                    ▼
-                                            ┌───────────────┐
-                                            │ PostgreSQL DB │
-                                            └───────────────┘
+                           ┌────────────────────────┼────────────────────┐
+                           │                        │                    │
+                           ▼                        ▼                    ▼
+                  ┌────────────────┐      ┌────────────────┐    ┌───────────────┐
+                  │ Apache Kafka   │      │ PostgreSQL DB  │    │ Email Service │
+                  │ Event Pipeline │      │ Persistent DB  │    │ Notifications │
+                  └────────────────┘      └────────────────┘    └───────────────┘
+
 ```
-
----
-
 # Screenshots
 
 ## Login Page
-<img width="1899" height="832" alt="image" src="https://github.com/user-attachments/assets/4e3c4737-678e-4f86-86f9-4a40ef24d1c4" />
 
+<p align="center">
+ <img width="1911" height="845" alt="image" src="https://github.com/user-attachments/assets/91aa742c-b64c-4f2a-890c-cc3062b2197a" />
+
+</p>
+
+---
 
 ## Dashboard
-<img width="1896" height="825" alt="image" src="https://github.com/user-attachments/assets/37494c11-baa7-4fae-8ee5-51f79ac2e185" />
+
+<p align="center">
+  <img width="1851" height="836" alt="image" src="https://github.com/user-attachments/assets/52d170e8-2498-4ce2-80c9-c1ea0b99c25e" />
+
+</p>
+
+---
 
 ## CSV Upload
-<img width="1876" height="840" alt="image" src="https://github.com/user-attachments/assets/811473b3-6d40-42ed-9265-7868c0de635e" />
 
+<p align="center">
+  <img width="1746" height="691" alt="image" src="https://github.com/user-attachments/assets/9a308427-72a4-4836-9133-2a2f82b2cec9" />
+" />
+</p>
+
+---
 
 ## Add Subscription Page
 
 <p align="center">
-  <img width="1912" height="853" src="https://github.com/user-attachments/assets/7759a43f-e37b-4205-9e17-4195d71b1640" />
+  <img width="1892" height="821" alt="image" src="https://github.com/user-attachments/assets/9f3ee84b-af10-4c7d-a34c-b806203b70f4" />
+" />
 </p>
 
 <br>
 
-<p align="center">
-  <img width="549" height="795" src="https://github.com/user-attachments/assets/aa4733bd-e6ed-4066-a23e-2430b04dece5" />
-</p>
-
-<br>
 
 <p align="center">
-  <img width="1676" height="767" src="https://github.com/user-attachments/assets/c4ae152b-8d50-4d19-a7af-256e7bf1ac4d" />
+  "<img width="1912" height="739" alt="image" src="https://github.com/user-attachments/assets/a8a2ac3b-60a2-420b-80ba-7a18bc27d1ab" />
+" />
 </p>
-
 
 ---
 
 # Local Setup
+# Docker & Kafka Setup
 
-## Backend Setup
+Kafka and Zookeeper are deployed locally using Docker Compose.
 
-```bash
-cd backend
-mvn clean install
-mvn spring-boot:run
-```
-
-Backend runs on:
-
-```text
-http://localhost:8080
-```
-
----
-
-## Frontend Setup
+## Start Kafka Services
 
 ```bash
-cd frontend
-npm install
-npm run dev
+docker compose up -d
 ```
 
-Frontend runs on:
-
-```text
-http://localhost:3000
-```
-
-# Environment Variables
-
-## Frontend (.env)
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8080
-```
-
----
-
-## Backend (application.properties)
-
-```properties
-spring.datasource.url=YOUR_DB_URL
-spring.datasource.username=YOUR_DB_USERNAME
-spring.datasource.password=YOUR_DB_PASSWORD
-
-spring.mail.username=YOUR_EMAIL
-spring.mail.password=YOUR_APP_PASSWORD
-
-jwt.secret=YOUR_SECRET_KEY
-```
-
-## Docker Support
+## Verify Running Containers
 
 ```bash
-docker build -t subguard-backend .
-docker run -p 8080:8080 subguard-backend
+docker ps
 ```
 
----
+This starts:
+- Apache Kafka
+- Zookeeper
 
-# Future Enhancements
-
-- OAuth2 / Google Authentication
-- Kafka-based event-driven transaction processing
-- Redis caching for faster subscription retrieval
-- AI-based subscription prediction and categorization
-- Real-time notification system using WebSockets
-- Kubernetes deployment support
-- Microservices architecture for scalable transaction processing
+used for asynchronous event-driven transaction processing.
 
 ---
 
-# Key Highlight
+## Important Note
 
-SubGuard dynamically derives subscriptions from transaction history using recurring payment heuristics instead of relying on manually maintained subscription records.
+Kafka consumers are enabled using `@KafkaListener`.
 
+If you want to run Kafka workflows locally:
+- ensure Docker containers are running
+- ensure Kafka listeners are uncommented in the backend controllers/services
+
+Example:
+
+```java
+kafkaProducerService.sendMessage(userId.toString());
+
+kafkaProducerService.sendNotificationEvent(userId.toString());
+```
+
+Kafka listeners handle:
+- asynchronous transaction processing
+- subscription detection events
+- notification workflows
+- email event handling

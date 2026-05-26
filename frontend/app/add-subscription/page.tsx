@@ -15,8 +15,8 @@ export default function AddSubscription() {
 
 
 useEffect(() => {
-  const token = localStorage.getItem("token");
-  const id = localStorage.getItem("userId");
+  const token = sessionStorage.getItem("token");
+  const id = sessionStorage.getItem("userId");
 
   if (!token || !id) {
     router.push("/login");
@@ -32,7 +32,12 @@ useEffect(() => {
     }
 
     try {
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
+        console.log(
+          process.env.NEXT_PUBLIC_API_URL
+        );
+
+        console.log(userId);
       await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/subscriptions/manual/${userId}`,
         {
@@ -46,7 +51,7 @@ useEffect(() => {
             amount: Number(amount),
             nextBillingDate: nextDate,
             status: "ACTIVE",
-            frequency,
+            billingCycle: frequency,
           }),
         }
       );

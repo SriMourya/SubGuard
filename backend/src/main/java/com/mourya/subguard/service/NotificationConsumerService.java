@@ -19,7 +19,7 @@ public class NotificationConsumerService {
         this.userRepository = userRepository;
     }
 
-//
+
 //    @KafkaListener(
 //            topics = "subscription-events",
 //            groupId = "notification-group")

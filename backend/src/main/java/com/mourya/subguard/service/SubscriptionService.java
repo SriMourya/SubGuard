@@ -39,6 +39,12 @@ public class SubscriptionService {
         sub.setStatus("ACTIVE");
         sub.setSource("MANUAL");
 
+        System.out.println(sub.getBillingCycle());
+
+        System.out.println(sub.getStatus());
+
+        System.out.println(sub.getServiceName());
+
         return subscriptionRepository.save(sub);
     }
     public List<Subscription> getSubscriptions(Long userId) {
@@ -61,6 +67,17 @@ public class SubscriptionService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         List<Transaction> transactions = transactionRepository.findByUser(user);
+
+        // DELETE OLD AUTO SUBSCRIPTIONS
+        List<Subscription> autoSubs =
+                subscriptionRepository.findByUser(user)
+                        .stream()
+                        .filter(sub ->
+                                "AUTO".equals(sub.getSource()))
+                        .toList();
+
+        subscriptionRepository.deleteAll(autoSubs);
+
 
         Map<String, List<Transaction>> grouped =
                 transactions.stream()
@@ -85,6 +102,22 @@ public class SubscriptionService {
 
                 if (diff >= 28 && diff <= 32) isMonthly = true;
                 if (diff >= 360 && diff <= 370) isYearly = true;
+
+                System.out.println(
+                        txns.get(i - 1).getMerchant()
+                );
+
+                System.out.println(
+                        txns.get(i - 1).getDate()
+                );
+
+                System.out.println(
+                        txns.get(i).getDate()
+                );
+
+                System.out.println(
+                        "DIFF = " + diff
+                );
             }
 
             if (!isMonthly && !isYearly) continue;

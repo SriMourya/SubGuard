@@ -20,6 +20,7 @@ public class JwtUtil {
     }
 
     public String generateToken(String email) {
+        System.out.println("JWT METHOD HIT");
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())

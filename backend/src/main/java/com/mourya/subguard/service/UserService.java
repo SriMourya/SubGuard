@@ -52,10 +52,10 @@ public class UserService {
         if (user != null && user.getPassword().equals(request.getPassword())) {
 
 
-            String token = jwtUtil.generateToken(user.getEmail());
-            System.out.println("TOKEN GENERATED: " + token);
+//            String token = jwtUtil.generateToken(user.getEmail());
+//            System.out.println("TOKEN GENERATED: " + token);
 
-            return new LoginResponse(token, user.getId());
+            return new LoginResponse("token", user.getId());
         }
 
         throw new RuntimeException("Invalid credentials");

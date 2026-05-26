@@ -3,24 +3,51 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Get current user
 export const getUser = async () => {
+
   try {
-    const res = await fetch(`${BASE_URL}/users/1`);
+
+    const token =
+      sessionStorage.getItem("token");
+
+    const userId =
+      sessionStorage.getItem("userId");
+
+    if (!token || !userId) {
+      throw new Error("User not logged in");
+    }
+
+    const res = await fetch(
+      `${BASE_URL}/users/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (!res.ok) {
       throw new Error("Failed to fetch user");
     }
 
     const data = await res.json();
+
     console.log("USER DATA:", data);
+
     return data;
+
   } catch (err) {
-    console.error("USER FETCH ERROR:", err);
+
+    console.error(
+      "USER FETCH ERROR:",
+      err
+    );
+
     return null;
   }
 };
 
 export const getSubscriptions = async (userId: number) => {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   if (!token) {
     throw new Error("No token found. Please login.");
   }
@@ -39,7 +66,7 @@ export const getSubscriptions = async (userId: number) => {
 
 export const detectSubscriptions = async (userId: number) => {
   try {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) {
       throw new Error("No token found. Please login.");
     }
@@ -64,7 +91,7 @@ export const detectSubscriptions = async (userId: number) => {
 };
 
 export const deleteSubscription = async (id: number) => {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   if (!token) {
     throw new Error("No token found. Please login.");
   }

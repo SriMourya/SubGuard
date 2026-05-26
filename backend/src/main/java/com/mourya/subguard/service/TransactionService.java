@@ -59,24 +59,24 @@ public class TransactionService {
 
         // STEP 2: ADD YOUR SUBSCRIPTION LOGIC HERE
 
-        Subscription sub = subscriptionRepository
-                .findByServiceNameAndUser(transaction.getMerchant(), user)
-                .orElse(null);
-
-        if (sub == null) {
-            sub = new Subscription();
-            sub.setServiceName(transaction.getMerchant());
-            sub.setAmount(transaction.getAmount());
-            sub.setUser(user);
-            sub.setSource("AUTO");
-        }
-
-        sub.setLastPaymentDate(transaction.getDate());
-        sub.setNextBillingDate(transaction.getDate().plusDays(30));
-        sub.setBillingCycle("MONTHLY");
-        sub.setStatus("ACTIVE");
-
-        subscriptionRepository.save(sub);
+//        Subscription sub = subscriptionRepository
+//                .findByServiceNameAndUser(transaction.getMerchant(), user)
+//                .orElse(null);
+//
+//        if (sub == null) {
+//            sub = new Subscription();
+//            sub.setServiceName(transaction.getMerchant());
+//            sub.setAmount(transaction.getAmount());
+//            sub.setUser(user);
+//            sub.setSource("AUTO");
+//        }
+//
+//        sub.setLastPaymentDate(transaction.getDate());
+//        sub.setNextBillingDate(transaction.getDate().plusDays(30));
+//        sub.setBillingCycle("MONTHLY");
+//        sub.setStatus("ACTIVE");
+//
+//        subscriptionRepository.save(sub);
 
         // STEP 3: Return transaction
         return savedTransaction;

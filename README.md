@@ -1,11 +1,22 @@
 # SubGuard
 
-SubGuard is a full-stack subscription tracking and recurring payment detection system that helps users monitor and manage their subscriptions intelligently.
-
-The platform analyzes uploaded transaction history (CSV) and automatically detects recurring payments such as Netflix, Spotify, Amazon Prime, and other subscription-based services using transaction pattern analysis and recurring payment heuristics.
+SubGuard is a full-stack subscription tracking platform that helps users identify, monitor, and manage recurring subscriptions from transaction data.
 
 ---
+## Problem Statement
 
+Many users unknowingly spend money on subscriptions they no longer use because recurring payments are scattered across bank statements and difficult to track manually. Existing banking applications often provide limited visibility into subscription spending, making it easy to miss upcoming renewals, duplicate subscriptions, or unnecessary recurring charges.
+
+As the number of subscription-based services continues to grow, users need a simple way to identify recurring payments, monitor subscription expenses, and receive timely reminders before billing dates.
+
+---
+## Solution
+
+SubGuard addresses this problem by analyzing transaction history and automatically detecting recurring payments using transaction pattern analysis and recurring payment heuristics. The platform converts raw transaction data into actionable subscription insights by identifying recurring charges, tracking active subscriptions, visualizing spending trends, and sending automated reminders before upcoming billing cycles.
+
+Using an event-driven architecture powered by Apache Kafka, SubGuard processes transactions asynchronously, enabling scalable subscription detection, automated notifications, and intelligent subscription management.
+
+---
 # Live Demo
 
 Frontend: https://sub-guard-delta.vercel.app
@@ -186,21 +197,8 @@ This helps identify recurring subscriptions while avoiding one-time payments.
 
 ## Architecture Diagram
 
-```text
- ┌──────────────┐        HTTPS + JWT        ┌───────────────┐
- │   Frontend   │ ───────────────────────▶ │    Backend    │
- │   Next.js    │ ◀─────────────────────── │ Spring Boot   │
- └──────────────┘       JSON Response       └──────┬────────┘
-                                                    │
-                           ┌────────────────────────┼────────────────────┐
-                           │                        │                    │
-                           ▼                        ▼                    ▼
-                  ┌────────────────┐      ┌────────────────┐    ┌───────────────┐
-                  │ Apache Kafka   │      │ PostgreSQL DB  │    │ Email Service │
-                  │ Event Pipeline │      │ Persistent DB  │    │ Notifications │
-                  └────────────────┘      └────────────────┘    └───────────────┘
+<img width="1237" height="1271" alt="image" src="https://github.com/user-attachments/assets/47a551eb-2db8-4c6f-84a3-b9fff427cf94" />
 
-```
 # Screenshots
 
 ## Login Page

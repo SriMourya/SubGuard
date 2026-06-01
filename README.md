@@ -197,7 +197,8 @@ This helps identify recurring subscriptions while avoiding one-time payments.
 
 ## Architecture Diagram
 
-<img width="1237" height="1271" alt="image" src="https://github.com/user-attachments/assets/47a551eb-2db8-4c6f-84a3-b9fff427cf94" />
+<img width="1600" height="845" alt="image" src="https://github.com/user-attachments/assets/058f40e1-8622-4783-9b00-400290121ccb" />
+
 
 # Screenshots
 

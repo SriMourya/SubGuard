@@ -21,7 +21,11 @@ Using an event-driven architecture powered by Apache Kafka, SubGuard processes t
 
 Frontend: https://sub-guard-delta.vercel.app
 
-> Note: The backend is hosted on Render free tier and may take a few seconds to respond on the first request due to cold-start behavior.
+>## Demo Status
+
+⚠️ The backend deployment is temporarily unavailable because the free-tier PostgreSQL instance expired.
+
+The project is fully functional when run locally using Docker Compose and PostgreSQL.
 
 ---
 
